@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     public struct Stats
     {
        
-        
         [Tooltip("How fast the player runs.")]
         public float speed;
 
@@ -24,6 +23,9 @@ public class PlayerMovement : MonoBehaviour
 
         [Tooltip("When the player is allowed to jump or not.")]
         public bool canJump;
+
+        [Tooltip("The current players health parameter")]
+        public float health;
     }
     
     public Stats playerStats;
@@ -106,6 +108,12 @@ public class PlayerMovement : MonoBehaviour
         playerStats.canJump = false;
         soundManager.PlayJumpSound();
         rb.AddForce(Vector3.up * playerStats.jumpForce);
+    }
+
+    public void ChangeHealth(float amount)
+    {
+        playerStats.health += amount;
+        print($"Player's Health:{ playerStats.health}");
     }
 
 }
