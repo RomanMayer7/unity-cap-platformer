@@ -112,7 +112,23 @@ public class PlayerMovement : MonoBehaviour
 
     public void ChangeHealth(float amount)
     {
-        playerStats.health += amount;
+        if (amount < 0) //If Reducing Health
+        {
+            if (playerStats.health > 0) //There is  Lower Bound
+            {
+                playerStats.health += amount;
+               
+            }
+        }
+        else if (amount > 0) //If Adding Health
+        {
+            if (playerStats.health < 100) //There is  Upper Bound
+            {
+                playerStats.health += amount;
+
+            }
+        }
+
         print($"Player's Health:{ playerStats.health}");
     }
 

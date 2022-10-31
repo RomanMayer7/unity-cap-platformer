@@ -8,6 +8,7 @@ public class CollectCoins : MonoBehaviour
     public GameObject coinParticles;
 
     PlayerMovement playerMovementScript;
+    
 
     void OnTriggerEnter(Collider other)
     {
@@ -16,6 +17,16 @@ public class CollectCoins : MonoBehaviour
             playerMovementScript = other.GetComponent<PlayerMovement>();
             playerMovementScript.soundManager.PlayCoinSound();
             ScoreManager.score += 10;
+
+            ScoreManager.coinsCollected += 1;
+            print("Collected " + ScoreManager.coinsCollected + " coins");
+            //After you to collect 10 coins - 1 health is added back to the player
+            if (ScoreManager.coinsCollected % 10==0)
+            {
+
+                playerMovementScript.ChangeHealth(1);
+            }
+
             GameObject particles = Instantiate(coinParticles, transform.position, new Quaternion());
             Destroy(gameObject);
         }
