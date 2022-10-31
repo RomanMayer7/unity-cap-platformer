@@ -1,3 +1,4 @@
 *.cs linguist-detectable=true
 *.browser linguist-detectable=false
 *.meta linguist-detectable=false
+*.aspx linguist-detectable=false
