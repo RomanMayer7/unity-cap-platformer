@@ -41,6 +41,7 @@ public class BasicEnemy : MonoBehaviour
     private float facing;
     private Rigidbody rb;
     private GameObject player;
+    private bool flee = false;
 
     private void Start()
     {
@@ -49,7 +50,7 @@ public class BasicEnemy : MonoBehaviour
     }
 
     private void Update()
-    {
+    {  
 
         // changes the enemy's behavior: pacing in circles or chasing the player
         if (enemyStats.idle == true)
@@ -59,9 +60,40 @@ public class BasicEnemy : MonoBehaviour
         }
         else if (enemyStats.idle == false)
         {
-            target.position = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
-            transform.LookAt(target);
-            transform.position = Vector3.MoveTowards(transform.position, player.transform.position, Time.deltaTime * enemyStats.chaseSpeed);
+            if (player)
+            {
+               //Fleeing from player if his Health Parameter it its Max ( 100)
+                if ((player.GetComponent<PlayerMovement>().playerStats.health > 99) && !flee)
+                {
+                    StartCoroutine(Flee());
+                }
+               
+            if (flee) // if fleeing from player
+            {     
+                Vector3 dir = transform.position - player.transform.position;
+                transform.LookAt(dir);
+                transform.position = Vector3.MoveTowards(transform.position, dir /*player.transform.position*/, Time.deltaTime * enemyStats.chaseSpeed);
+            }
+            else  //otherwise attacking playe r(chasing him)
+            {
+                target.position = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
+                transform.LookAt(target);
+                transform.position = Vector3.MoveTowards(transform.position, player.transform.position, Time.deltaTime * enemyStats.chaseSpeed);
+                Debug.Log("Chase!!!");
+            }
+        }
+
+
+        }
+
+        IEnumerator Flee()
+        {
+            Debug.Log("Start Flee!!!");
+            flee = true;
+            yield return new WaitForSeconds(3);
+            flee = false;
+            Debug.Log("Done Flee!!!");
+            enemyStats.idle = true;
         }
 
         // stops enemy from following player up the inaccessible slopes
